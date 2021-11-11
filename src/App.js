@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadGames } from "./actions/gameActions";
+import Game from "./components/Game";
+import styled from "styled-components";
+import { motion } from "framer-motion";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadGames());
+  }, [dispatch]);
+
+  const { popular, newGames, upcoming } = useSelector((state) => state.games);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GameList>
+      <h2>Upcoming Games</h2>
+      <Games>
+        {upcoming.map((game) => (
+          <Game
+            name={game.name}
+            released={game.released}
+            id={game.id}
+            image={game.background_imge}
+          />
+        ))}
+      </Games>
+    </GameList>
   );
 }
+const GameList = motion.div``;
+const Games = motion.div``;
 
 export default App;
